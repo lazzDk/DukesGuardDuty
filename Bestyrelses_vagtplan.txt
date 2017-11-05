@@ -1,0 +1,34 @@
+Dennis Duggen		DD
+Kasper Graugaard	KG
+Jesper Thorning		JT
+Dennis Jørgensen	DJ
+Tristan Søndergaard	TS
+Tonny Møller		TM
+Diana Svendsen		DS
+Thomas Juhl		TJ
+Martin Sigvartsen	MS
+
+____________________________________________
+
+OUTSIDER:	DD
+
+Uge 44		KG/JT		DJ/TS
+
+Uge 45		TM/DS		TJ/MS
+
+
+OUTSIDER:	KG
+
+Uge 46		DJ/TS		DD/JT
+
+Uge 47		TJ/MS		TM/DS
+
+OUTSIDER:	JT
+
+Uge 48		KG/DD		DJ/TS
+
+Uge 49		TM/DS		TJ/MS
+
+
+
+
