@@ -1,5 +1,14 @@
-<div>
-  <input [(ngModel)]="userName" (blur)="onUserNameChanges()" type="text" >
-  <input [(ngModel)]="userInitials" type="text" >
-  <button (click)="addUser()">add</button>
-</div>
+
+    <div class="form-group">
+      <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <label for="userNameInput">Navn</label>
+            <input type="text" class="form-control" id="userNameInput" [(ngModel)]="userName" (blur)="onUserNameChanges()" >
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <label for="userInitialInput">Initialer</label>
+            <input type="text" class="form-control" id="userInitialInput" [(ngModel)]="userInitials">
+        </div>
+      </div>
+    </div>
+   <button (click)="addUser()" class="btn btn-primary">Tilføj</button>

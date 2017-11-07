@@ -1,0 +1,121 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+          <div class="form-group">
+              <label>Start date</label>
+              <my-date-picker [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)"></my-date-picker>
+            </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Tirsdag</th>
+                <th>Torsdag</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Første uge</td>
+                <td>
+                  <div class="row">
+                    <div class="col-xs-5">
+                        <select class="form-control" [(ngModel)]="scheduleSetup?.users[0]">
+                          <option *ngFor="let user of users | async" [ngValue]="user">{{user.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-1">
+                      /
+                    </div>
+                    <div class="col-xs-5">
+                        <select class="form-control" [(ngModel)]="scheduleSetup?.users[1]">
+                          <option *ngFor="let user of users | async" [ngValue]="user">{{user.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="row">
+                      <div class="col-xs-5">
+                          <select class="form-control" [(ngModel)]="scheduleSetup?.users[2]">
+                            <option *ngFor="let user of users | async" [ngValue]="user">{{user.name}}</option>
+                          </select>
+                      </div>
+                      <div class="col-xs-1">
+                        /
+                      </div>
+                      <div class="col-xs-5">
+                          <select class="form-control" [(ngModel)]="scheduleSetup?.users[3]">
+                            <option *ngFor="let user of users | async" [ngValue]="user">{{user.name}}</option>
+                          </select>
+                        </div>
+                    </div>
+                </td>
+              </tr>
+              <tr>
+                  <td>Anden uge</td>
+                  <td>
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <select class="form-control" [(ngModel)]="scheduleSetup?.users[4]">
+                              <option *ngFor="let user of users | async" [ngValue]="user">{{user.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-1">
+                          /
+                        </div>
+                        <div class="col-xs-5">
+                            <select class="form-control" [(ngModel)]="scheduleSetup?.users[5]">
+                              <option *ngFor="let user of users | async" [ngValue]="user">{{user.name}}</option>
+                            </select>
+                          </div>
+                      </div>
+                  </td>
+                  <td>
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <select class="form-control" [(ngModel)]="scheduleSetup?.users[6]">
+                              <option *ngFor="let user of users | async" [ngValue]="user">{{user.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-1">
+                          /
+                        </div>
+                        <div class="col-xs-5">
+                            <select class="form-control" [(ngModel)]="scheduleSetup?.users[7]">
+                              <option *ngFor="let user of users | async" [ngValue]="user">{{user.name}}</option>
+                            </select>
+                          </div>
+                      </div>
+                  </td>
+                </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>
+                    Sidder over
+                </td>
+                <td colspan="2">
+                  <div class="row">
+                    <div class="col-xs-5">
+                        <select class="form-control" [(ngModel)]="scheduleSetup?.users[8]">
+                            <option *ngFor="let user of users | async" [ngValue]="user">{{user.name}}</option>
+                          </select>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <button class="btn btn-primary" (click)="saveSchedule()">
+        <span *ngIf="saved == true">Gemt...</span>
+        <span *ngIf="saved == false">Gem</span>
+      </button>
+  </div>
+</div>

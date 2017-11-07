@@ -14,16 +14,20 @@ export class UserCreationComponent implements OnInit {
   userCollection: AngularFirestoreCollection<User>;
   userName: string;
   userInitials: string;
+  lastIndex :number = 0;
 
   constructor(private db: AngularFirestore){
-    this.userCollection = db.collection<User>('Users');
+    this.userCollection = db.collection<User>('Users', ref => ref.orderBy('index'));
+    this.userCollection.valueChanges().subscribe(users => {
+      this.lastIndex = users[users.length-1].index +  1;
+    })
   }
 
   ngOnInit() {
   }
 
   addUser(){
-    this.userCollection.add({name: this.userName, initials: this.userInitials});
+    this.userCollection.add({name: this.userName, initials: this.userInitials, index: this.lastIndex});
     this.userName = '';
     this.userInitials =  '';
   }

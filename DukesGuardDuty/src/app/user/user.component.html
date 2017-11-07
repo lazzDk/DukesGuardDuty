@@ -1,19 +1,33 @@
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Initials</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users | async">
-      <td>{{user.name}}</td>
-      <td>{{user.initials}}</td>
-      <td><button (click)="deleteUser(user)">Delete</button></td>
-    </tr>
-  </tbody>
-</table>
 
-<app-user-creation></app-user-creation>
-
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Navn</th>
+            <th>Initialer</th>
+            <th>#</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users | async">
+              <td>{{user.name}}</td>
+              <td>{{user.initials}}</td>
+              <td>{{user.index}}
+                  <!--
+                     <button class="btn btn-danger" (click)="changeUp(user)">Delete</button>
+                     <button class="btn btn-danger" (click)="changeDown(user)">Delete</button>
+                  -->
+              </td>
+              <td><button class="btn btn-danger" (click)="deleteUser(user)">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+      <app-user-creation></app-user-creation>
+  </div>
+</div>

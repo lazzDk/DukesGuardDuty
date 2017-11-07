@@ -14,11 +14,8 @@ export class UserComponent implements OnInit {
   userCollection: AngularFirestoreCollection<User>;
   users: Observable<User[]>;
 
-  userName: string;
-  userII: string;
-
   constructor(private db: AngularFirestore){
-    this.userCollection = db.collection<User>('Users');
+    this.userCollection = db.collection<User>('Users', ref => ref.orderBy('index'));
     this.users = this.userCollection.snapshotChanges().map(actions => {
       return actions.map(action => {
         const data = action.payload.doc.data() as User;
@@ -31,14 +28,18 @@ export class UserComponent implements OnInit {
   ngOnInit() {
   }
 
-  addUser(){
-    this.userCollection.add({name: this.userName, initials: this.userII});
-    this.userName = '';
-    this.userII =  '';
+  changeUp(user:User){
+
+  }
+
+  changeDown(user:User){
+    
   }
 
   deleteUser(user:User){
-    this.userCollection.doc(user.id).delete();;
+    if(confirm("Er du sikker på, at du vil slette "+user.name)) {
+      this.userCollection.doc(user.id).delete(); 
+    }
   }
 
 }

@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { UserComponent } from './user/user.component';
 import { GuardDutyComponent } from './guard-duty/guard-duty.component';
+import { ScheduleSetupComponent } from './schedule-setup/schedule-setup.component';
+import { UserComponent } from './user/user.component';
 
 const appRoutes:Routes =  [
     {
@@ -12,6 +13,10 @@ const appRoutes:Routes =  [
     {
         path: 'guardDuty',
         component: GuardDutyComponent
+    },
+    {
+        path: 'schedulesetup',
+        component: ScheduleSetupComponent
     },
     {
         path: '',

@@ -1,3 +1,90 @@
-<p>
-  guard-duty works!
-</p>
+
+<div *ngIf="scheduleSetup != null">
+  Skema sat til start: uge {{startWeek}}
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <label>Dato:</label>
+    <my-date-picker [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)"></my-date-picker>
+   </div>
+</div>
+<div *ngIf="scheduleSetup != null">
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Tirsdag</th>
+            <th>Torsdag</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="weeksBetweenDates < 2 || (weeksBetweenDates > 0 && weeksBetweenDates % 2 == 0)">
+          <tr>
+            <td><strong>Uge {{getWeekNumber(0)}}</strong></td>
+            <td>
+              {{scheduleUsers[0].initials}}
+              /
+              {{scheduleUsers[1].initials}} 
+            </td>
+            <td>
+              {{scheduleUsers[2].initials}}
+              /
+              {{scheduleUsers[3].initials}} 
+            </td>
+          </tr>
+          <tr>
+              <td><strong>Uge {{getWeekNumber(1)}}</strong></td>
+              <td>
+                {{scheduleUsers[4].initials}}
+                /
+                {{scheduleUsers[5].initials}} 
+              </td>
+              <td>
+                {{scheduleUsers[6].initials}}
+                /
+                {{scheduleUsers[7].initials}} 
+              </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="weeksBetweenDates > 1 && weeksBetweenDates % 2 != 0">
+            <tr>
+              <td><strong>Uge {{getWeekNumber(0)}}</strong></td>
+              <td>
+                  {{scheduleUsers[2].initials}}
+                  /
+                  {{scheduleUsers[3].initials}} 
+              </td>
+              <td>
+                  {{scheduleUsers[0].initials}}
+                  /
+                  {{scheduleUsers[1].initials}} 
+              </td>
+            </tr>
+            <tr>
+                <td><strong>Uge {{getWeekNumber(1)}}</strong></td>
+                <td>
+                  {{scheduleUsers[6].initials}}
+                  /
+                  {{scheduleUsers[7].initials}} 
+                </td>
+                <td>
+                  {{scheduleUsers[4].initials}}
+                  /
+                  {{scheduleUsers[5].initials}} 
+                </td>
+            </tr>
+          </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">
+              Sidder over: {{scheduleUsers[8].initials}}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
