@@ -28,15 +28,7 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
   }
-
-  changeUp(user:User){
-
-  }
-
-  changeDown(user:User){
-    
-  }
-
+ 
   deleteUser(user:User){
     if(confirm("Er du sikker på, at du vil slette "+user.name)) {
       this.userCollection.doc(user.id).delete(); 

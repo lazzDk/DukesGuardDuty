@@ -15,8 +15,11 @@
             <a class="navbar-brand" routerLink="/guardDuty" routerLinkActive="link-active">Vagtplan</a>
         </li>
         <li class="nav-item">
-            <a *ngIf="(authService.isAuthed )" class="navbar-brand" routerLink="/schedulesetup" routerLinkActive="link-active">Opsætning</a>
+            <a *ngIf="(authService.isAuthed)" class="navbar-brand" routerLink="/schedulesetup" routerLinkActive="link-active">Opsætning</a>
         </li>
+        <li class="nav-item">
+          <a *ngIf="(authService.isAuthed)" class="navbar-brand" routerLink="/admin" routerLinkActive="link-active">Admin</a>
+      </li>
         
       </ul>
       <div class="my-lg-0">

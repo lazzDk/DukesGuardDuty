@@ -1,17 +1,19 @@
-
-<div *ngIf="scheduleSetup != null">
-  Skema sat til start: uge {{startWeek}}
+<div class="row" *ngIf="scheduleSetup != null">
+  <div class="col-lg-6 col-xs-12">
+      Skema sat til start: uge <span class="badge badge-dark">{{startWeek}}</span>
+  </div>
 </div>
 
+
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-lg-8 col-xs-12">
     <label>Dato:</label>
     <my-date-picker [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)"></my-date-picker>
    </div>
 </div>
 <div *ngIf="scheduleSetup != null">
   <div class="row">
-    <div class="col-xs-12">
+    <div class="col-lg-8 col-xs-12">
       <table class="table">
         <thead>
           <tr>

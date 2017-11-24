@@ -16,6 +16,7 @@ import { UserComponent } from './user/user.component';
 import { GuardDutyComponent } from './guard-duty/guard-duty.component';
 import { UserCreationComponent } from './user/user-creation/user-creation.component';
 import { ScheduleSetupComponent } from './schedule-setup/schedule-setup.component';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ScheduleSetupComponent } from './schedule-setup/schedule-setup.componen
     UserComponent,
     GuardDutyComponent,
     UserCreationComponent,
-    ScheduleSetupComponent
+    ScheduleSetupComponent,
+    AdminComponent
   ],
   imports: [
     AppRoutingModule,
