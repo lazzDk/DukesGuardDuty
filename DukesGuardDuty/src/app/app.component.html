@@ -1,16 +1,41 @@
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container">
-    <div class="navbar-header">
-        <a class="navbar-brand" routerLink="/users" routerLinkActive="active">Medlemmer</a>
-        <a class="navbar-brand" routerLink="/guardDuty" routerLinkActive="active">Vagtplan</a>
-        <a class="navbar-brand" routerLink="/schedulesetup" routerLinkActive="active">Opsætning</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" routerLink="/guardDuty" >
+      <img src="/assets/images/logo_web.png" width="30" height="30" alt="">
+    </a>  
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+            <a class="navbar-brand" routerLink="/users" routerLinkActive="link-active">Medlemmer</a>
+        </li>
+        <li class="nav-item">
+            <a class="navbar-brand" routerLink="/guardDuty" routerLinkActive="link-active">Vagtplan</a>
+        </li>
+        <li class="nav-item">
+            <a *ngIf="(authService.isAuthed )" class="navbar-brand" routerLink="/schedulesetup" routerLinkActive="link-active">Opsætning</a>
+        </li>
+        
+      </ul>
+      <div class="my-lg-0">
+        <div class="d-inline" *ngIf="(authService.user | async)">
+            <div class="p-1 d-inline bg-warning" *ngIf="!authService.isAuthed">Venter på godkendelse</div>
+            <div class="p-1 text-white d-inline bg-success" *ngIf="authService.isAuthed">Administrator</div>
+        </div>
+        <div class="d-inline" *ngIf="!(authService.user | async)">
+          <button class="btn btn-success" (click)="login()">Google sign in</button>
+        </div>
+        <div class="d-inline" *ngIf="(authService.user | async)">
+          <span class="text-white">Hej {{authService.displayName}}</span>
+          <button class="btn btn-success" (click)="logout()">Log ud</button>
+        </div>
+      </div>
     </div>
-  </div>
-</nav>
-<br/>
-<br/>
-<div class="container starter-template">
+  </nav>
   <br/>
-  <router-outlet></router-outlet>
-</div>
-
+  <div class="container starter-template">
+    <br/>
+    <router-outlet></router-outlet>
+  </div>

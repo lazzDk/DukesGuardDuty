@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
+import { AuthService } from './../auth/auth.service';
 import { User } from './user.model';
 
 @Component({
@@ -14,7 +15,7 @@ export class UserComponent implements OnInit {
   userCollection: AngularFirestoreCollection<User>;
   users: Observable<User[]>;
 
-  constructor(private db: AngularFirestore){
+  constructor(private db: AngularFirestore, private authService: AuthService){
     this.userCollection = db.collection<User>('Users', ref => ref.orderBy('index'));
     this.users = this.userCollection.snapshotChanges().map(actions => {
       return actions.map(action => {

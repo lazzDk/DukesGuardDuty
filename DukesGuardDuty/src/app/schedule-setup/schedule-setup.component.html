@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-xs-12">
           <div class="form-group">
-              <label>Start date</label>
+              <label>Startdato</label>
               <my-date-picker [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)"></my-date-picker>
             </div>
       </div>
@@ -113,7 +113,7 @@
           </table>
         </div>
       </div>
-      <button class="btn btn-primary" (click)="saveSchedule()">
+      <button class="btn btn-success" (click)="saveSchedule()">
         <span *ngIf="saved == true">Gemt...</span>
         <span *ngIf="saved == false">Gem</span>
       </button>

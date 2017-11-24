@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AuthGuardService } from './auth-guard.service';
 import { GuardDutyComponent } from './guard-duty/guard-duty.component';
 import { ScheduleSetupComponent } from './schedule-setup/schedule-setup.component';
 import { UserComponent } from './user/user.component';
@@ -16,7 +17,8 @@ const appRoutes:Routes =  [
     },
     {
         path: 'schedulesetup',
-        component: ScheduleSetupComponent
+        component: ScheduleSetupComponent,
+        canActivate: [AuthGuardService]
     },
     {
         path: '',
@@ -27,7 +29,8 @@ const appRoutes:Routes =  [
 
 @NgModule({
     imports: [RouterModule.forRoot(appRoutes)],
-    exports: [RouterModule]
+    exports: [RouterModule],
+    providers: [AuthGuardService]
 })
 
 export class AppRoutingModule {

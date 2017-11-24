@@ -6,7 +6,7 @@
           <tr>
             <th>Navn</th>
             <th>Initialer</th>
-            <th>#</th>
+           <!--  <th>#</th>-->
             <th></th>
           </tr>
         </thead>
@@ -14,19 +14,16 @@
           <tr *ngFor="let user of users | async">
               <td>{{user.name}}</td>
               <td>{{user.initials}}</td>
-              <td>{{user.index}}
-                  <!--
-                     <button class="btn btn-danger" (click)="changeUp(user)">Delete</button>
-                     <button class="btn btn-danger" (click)="changeDown(user)">Delete</button>
-                  -->
+              <!-- <td>{{user.index}} </td>-->
+              <td>
+                <button *ngIf="(authService.isAuthed)" class="btn btn-danger" (click)="deleteUser(user)"> <span aria-hidden="true">&times;</span> Slet</button>
               </td>
-              <td><button class="btn btn-danger" (click)="deleteUser(user)">Delete</button></td>
           </tr>
         </tbody>
       </table>
   </div>
 </div>
-<div class="row">
+<div  *ngIf="(authService.isAuthed)" class="row">
   <div class="col-md-12 col-lg-12">
       <app-user-creation></app-user-creation>
   </div>
