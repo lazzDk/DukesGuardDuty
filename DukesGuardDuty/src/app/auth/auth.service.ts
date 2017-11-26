@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 
+import  { Router } from '@angular/router';
 import { AngularFireAuth  } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
 import { AccessRequest } from './../admin/access-request.model';
+import { AccessConfirmation } from './../admin/access-confirmation.model';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -19,38 +21,35 @@ export class AuthService {
   accessRequestCollection: AngularFirestoreCollection<AccessRequest>;
   accessRequests: AccessRequest[] = [];
 
-  hasFetchedAccess: boolean = false;
+  accessConfirmationCollection: AngularFirestoreCollection<AccessConfirmation>;
+  accessConfirmations: AccessConfirmation[] = [];
+
+  accessRequestsFetched: boolean = false;
+  accessConfirmationsFetched: boolean = false;
  
-  constructor(private firebaseAuth: AngularFireAuth, private db: AngularFirestore) { 
+  constructor(private firebaseAuth: AngularFireAuth, private db: AngularFirestore, private router: Router) { 
     this.user = firebaseAuth.authState;
+   
+    this.accessRequestCollection = this.db.collection<AccessRequest>('AccessRequests');
+    this.accessConfirmationCollection = db.collection<AccessConfirmation>('AccessConfirmations');
     
-    this.accessRequestCollection = db.collection<AccessRequest>('AccessRequests');
     this.accessRequestCollection.valueChanges().subscribe(data => {
+      this.accessRequestsFetched = true;
       this.accessRequests = data;
-      this.hasFetchedAccess = true;
       this.setAuthStatus();
-    })
+    });
+
+    this.accessConfirmationCollection.valueChanges().subscribe(data => {
+      this.accessConfirmationsFetched = true;
+      this.accessConfirmations = data;
+      this.setAuthStatus();
+    });
+
     firebaseAuth.authState.subscribe(data => {
       this.displayName = data == null ? '' : data.displayName;
       this.uid = data == null ? '' : data.uid;
       this.setAuthStatus();
-      
      });
-  }
-
-  checkAccess(): boolean{
-    if(this.uid == '') { 
-      return false;
-    }
-    if(!this.hasAccessRequest() && this.hasFetchedAccess){
-      this.accessRequestCollection.add({displayName: this.displayName, isApproved:false, userId: this.uid}) ;
-      return false;
-    }
-    return this.isApprovedAccess();
-  }
-
-  setAuthStatus(){
-    this.isAuthed = this.checkAccess();
   }
 
   hasAccessRequest(){
@@ -58,9 +57,30 @@ export class AuthService {
     return item != null;
   }
 
-  isApprovedAccess(){
-    let item = this.accessRequests.find(accessRequest => accessRequest.userId == this.uid && accessRequest.isApproved == true);
+  handleAccessRequest(){
+    if(!this.hasAccessRequest()){
+      this.accessRequestCollection.add({displayName: this.displayName, userId: this.uid}) ;
+    }
+  }
+
+  hasApprovedConfirmation(){
+    let item = this.accessConfirmations.find(accessConfirmation => accessConfirmation.userId == this.uid);
     return item != null;
+  }
+
+  checkAccess(): boolean{
+    if(this.uid == '' || !this.accessRequestsFetched || !this.accessConfirmationsFetched) { 
+      return false;
+    }
+    if(this.hasApprovedConfirmation()) {
+      return true;
+    }
+    this.handleAccessRequest();
+    return false;
+  }
+
+  setAuthStatus(){
+    this.isAuthed = this.checkAccess();
   }
 
   login(){
@@ -76,6 +96,7 @@ export class AuthService {
     this.firebaseAuth
       .auth
       .signOut();
+      this.router.navigate(['/guardDuty']);
   }
 
   getUser(){

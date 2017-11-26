@@ -1,7 +1,34 @@
 
-<div class="row">
+<div class="row" *ngIf="(authService.isAuthed)" >
   <div class="col-md-12 col-lg-12">
+    <h3>Afventer:</h3>
     <table class="table">
+        <thead>
+          <tr>
+            <th>Navn</th>
+            <th>UserId</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let accessRequest of accessRequests | async">
+              <td>{{accessRequest.displayName}}</td>
+              <td>{{accessRequest.userId}}</td>
+              <td>
+                <button class="btn btn-success" (click)="approveRequest(accessRequest)"> <span aria-hidden="true"> &#10003;</span> Godkend</button>
+                <button class="btn btn-danger" (click)="deleteRequest(accessRequest)"> <span aria-hidden="true">&times;</span> Slet request</button>
+              </td>
+            
+          </tr>
+        </tbody>
+      </table>
+  </div>
+</div>
+
+<div class="row" *ngIf="(authService.isAuthed)">
+  <div class="col-md-12 col-lg-12">
+      <h3>Godkendte:</h3>
+      <table class="table">
         <thead>
           <tr>
             <th>Navn</th>
@@ -11,19 +38,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let accessRequest of accessRequests | async">
-              <td>{{accessRequest.displayName}}</td>
-              <td>{{accessRequest.userId}}</td>
-              <td>
-                  <span *ngIf="accessRequest.isApproved" aria-hidden="true">&#10003;</span>
-                  <span *ngIf="!accessRequest.isApproved" aria-hidden="true">&times;</span>
-              </td>
-              <td *ngIf="!accessRequest.isApproved" >
-                <button *ngIf="(authService.isAuthed)" class="btn btn-success" (click)="approve(accessRequest)"> <span aria-hidden="true"> &#10003;</span> Godkend</button>
-                <button *ngIf="(authService.isAuthed)" class="btn btn-danger" (click)="delete(accessRequest)"> <span aria-hidden="true">&times;</span> Slet request</button>
-              </td>
-              <td *ngIf="accessRequest.isApproved">
-                <button *ngIf="(authService.isAuthed)" class="btn btn-danger" (click)="delete(accessRequest)"> <span aria-hidden="true">&times;</span> Slet adgang</button>
+          <tr *ngFor="let accessConfirmation of accessConfirmations | async">
+              <td>{{accessConfirmation.displayName}}</td>
+              <td>{{accessConfirmation.userId}}</td>
+              <td >
+                <button class="btn btn-danger" (click)="removeAccess(accessConfirmation)"> <span aria-hidden="true">&times;</span> Slet adgang</button>
               </td>
           </tr>
         </tbody>
