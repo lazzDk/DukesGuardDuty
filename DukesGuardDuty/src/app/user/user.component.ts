@@ -15,7 +15,7 @@ export class UserComponent implements OnInit {
   userCollection: AngularFirestoreCollection<User>;
   users: Observable<User[]>;
 
-  constructor(private db: AngularFirestore, private authService: AuthService){
+  constructor(private db: AngularFirestore, public authService: AuthService){
     this.userCollection = db.collection<User>('Users', ref => ref.orderBy('index'));
     this.users = this.userCollection.snapshotChanges().map(actions => {
       return actions.map(action => {

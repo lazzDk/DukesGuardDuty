@@ -1,14 +1,17 @@
 <div class="row" *ngIf="scheduleSetup != null">
   <div class="col-lg-6 col-xs-12">
-      Vagtplanen er beregnet med start i uge <span class="badge badge-dark">{{startWeek}}</span>
+    <h5>
+        Valgt uge <span class="badge badge-dark">{{getWeekNumber(0)}}</span>
+    </h5>
   </div>
 </div>
 
-
 <div class="row">
   <div class="col-lg-8 col-xs-12">
-    <label>Dato:</label>
-    <my-date-picker [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)"></my-date-picker>
+      <div class="input-group">
+          <span class="input-group-addon" id="basic-name">Dato:</span>
+          <my-date-picker class="form-control" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" aria-describedby="basic-name"></my-date-picker>
+      </div>
    </div>
 </div>
 <div *ngIf="scheduleSetup != null">
@@ -60,5 +63,16 @@
       </table>
     </div>
   </div>
+  <div class="row">
+    <div class="col-lg-8 col-xs-12">
+      <button class="btn btn-success float-left" [disabled]="weeksBetweenDates == 0" (click)="moveWeekBackward()"><span aria-hidden="true"> &larr;</span> Tidligere</button>
+      <button class="btn btn-success float-right" (click)="moveWeekForward()">Næste <span aria-hidden="true"> &rarr;</span> </button>
+    </div>
+  </div>
+  <div class=" push-to-bottom">
+    Vagtplanen er beregnet med start i uge <span class="badge badge-dark">{{startWeek}}</span>
+  </div>
 </div>
+
+
 

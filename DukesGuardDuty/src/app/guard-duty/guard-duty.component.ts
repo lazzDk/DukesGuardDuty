@@ -178,4 +178,16 @@ export class GuardDutyComponent implements OnInit {
     this.weeksBetweenDates = this.getWeeksBetweenTwoDates(new Date(this.scheduleSetup.startDate), new Date(event.jsdate));
     this.calculateTeams();
   }
+
+  moveWeekForward(){
+    this.weeksBetweenDates = this.weeksBetweenDates + 1;
+    this.calculateTeams();
+  }
+
+  moveWeekBackward(){
+    let previousWeek = this.weeksBetweenDates - 1;
+    this.weeksBetweenDates = previousWeek < 0 ? 0 :  previousWeek;
+    this.calculateTeams();
+
+  }
 }

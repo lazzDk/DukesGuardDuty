@@ -19,7 +19,7 @@ export class AdminComponent implements OnInit {
   accessConfirmationCollection: AngularFirestoreCollection<AccessConfirmation>;
   accessConfirmations: Observable<AccessConfirmation[]>;
 
-  constructor(private db: AngularFirestore, private authService: AuthService) {
+  constructor(private db: AngularFirestore, public authService: AuthService) {
     this.accessRequestCollection = db.collection<AccessRequest>('AccessRequests');
     this.accessRequests = this.accessRequestCollection.snapshotChanges().map(actions => {
       return actions.map(action => {
