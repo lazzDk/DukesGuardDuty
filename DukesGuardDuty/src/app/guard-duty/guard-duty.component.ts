@@ -7,7 +7,6 @@ import { IMyDpOptions, IMyDateModel } from 'mydatepicker';
 import { ScheduleSetup } from './../schedule-setup/schedule-setup.model';
 import { ScheduleSetupService } from './../schedule-setup/schedule-setup.service';
 import { User } from './../user/user.model';
-import { UserService } from './../user/user.service';
 
 @Component({
   selector: 'app-guard-duty',
@@ -20,8 +19,7 @@ export class GuardDutyComponent implements OnInit {
   maxWeeksInStartYear: number = 52;  
   guardDutyUsers: User[];
   weeksBetweenDates: number = 0;
-  users: User[];
-
+  
   myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mm-yyyy',
     editableDateField	:false,
@@ -30,7 +28,7 @@ export class GuardDutyComponent implements OnInit {
     monthLabels: { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'Maj', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Okt', 11: 'Nov', 12: 'Dec' }
   }
 
-  constructor(private scheduleSetupService: ScheduleSetupService, private userService: UserService) {
+  constructor(private scheduleSetupService: ScheduleSetupService) {
     this.scheduleSetupService.getScheduleSetups().subscribe(setups => {
       this.scheduleSetup = setups != null && setups.length > 0 ? setups[0] : null;
       if(this.scheduleSetup != null){

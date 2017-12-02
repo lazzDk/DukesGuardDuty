@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './auth/auth.service';
 import { GuardDutyComponent } from './guard-duty/guard-duty.component';
+import { GuardDutySwitchService } from './guard-duty/guard-duty-switch/guard-duty-switch.service';
 import { ScheduleSetupComponent } from './schedule-setup/schedule-setup.component';
 import { ScheduleSetupService } from './schedule-setup/schedule-setup.service';
 import { UserComponent } from './user/user.component';
@@ -44,6 +45,7 @@ import { GuardDutySwitchComponent } from './guard-duty/guard-duty-switch/guard-d
   providers: [ 
     AccessService,
     AuthService,
+    GuardDutySwitchService,
     ScheduleSetupService,
     UserService
   ],

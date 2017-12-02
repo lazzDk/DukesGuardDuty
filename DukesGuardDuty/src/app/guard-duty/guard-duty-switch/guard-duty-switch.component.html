@@ -1,3 +1,123 @@
-<p>
-  guard-duty-switch works!
-</p>
+<div class="row">
+  <div class="col-lg-6 col-xs-12">
+      <div class="input-group">
+          <span class="input-group-addon" id="from-date-name">Skift fra uge:</span>
+          <my-date-picker class="form-control" [options]="myDatePickerOptions" (dateChanged)="onFromDateChanged($event)" aria-describedby="from-date-name"></my-date-picker>
+      </div>
+   </div>
+   <div class="col-lg-6 col-xs-12">
+    <div class="input-group">
+        <span class="input-group-addon" id="to-date-name">Skift til uge:</span>
+        <my-date-picker class="form-control" [options]="myDatePickerOptions" (dateChanged)="onToDateChanged($event)" aria-describedby="to-date-name"></my-date-picker>
+    </div>
+ </div>
+</div>
+
+<div *ngIf="scheduleSetup != null">
+  <div class="row">
+    <div class="col-lg-6 col-xs-12" *ngIf="guardDutyUsersFrom != null">
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Tirsdag</th>
+            <th>Torsdag</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Uge {{getWeekNumberViewFriendly(0, weeksBetweenDatesFrom)}}</strong></td>
+            <td>
+              <button class="btn btn primary" (click)="setFrom(guardDutyUsersFrom[0])"> 
+               {{guardDutyUsersFrom[0].initials}}
+              </button>
+              /
+              <button class="btn btn primary" (click)="setFrom(guardDutyUsersFrom[1])"> 
+                {{guardDutyUsersFrom[1].initials}} 
+              </button>
+            </td>
+            <td>
+              <button class="btn btn primary" (click)="setFrom(guardDutyUsersFrom[2])"> 
+                {{guardDutyUsersFrom[2].initials}} 
+              </button>
+              /
+              <button class="btn btn primary" (click)="setFrom(guardDutyUsersFrom[3])"> 
+                {{guardDutyUsersFrom[3].initials}} 
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">
+              Sidder over:  
+                <button class="btn btn primary" (click)="setFrom(guardDutyUsersFrom[4])"> 
+                  {{guardDutyUsersFrom[4].initials}} 
+                </button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="row">
+        <div class="col-lg-8 col-xs-12">
+          <button class="btn btn-success float-left" [disabled]="weeksBetweenDatesTo == 0" (click)="moveFromBackward()"><span aria-hidden="true"> &larr;</span> Tidligere</button>
+          <button class="btn btn-success float-right" (click)="moveFromForward()">Næste <span aria-hidden="true"> &rarr;</span> </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-xs-12" *ngIf="guardDutyUsersTo != null">
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Tirsdag</th>
+            <th>Torsdag</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td><strong>Uge {{getWeekNumberViewFriendly(0, weeksBetweenDatesTo)}}</strong></td>
+              <td>
+                <button class="btn btn primary" (click)="setTo(guardDutyUsersTo[0])"> 
+                 {{guardDutyUsersTo[0].initials}}
+                </button>
+                /
+                <button class="btn btn primary" (click)="setTo(guardDutyUsersTo[1])"> 
+                  {{guardDutyUsersTo[1].initials}} 
+                </button>
+              </td>
+              <td>
+                <button class="btn btn primary" (click)="setTo(guardDutyUsersTo[2])"> 
+                  {{guardDutyUsersTo[2].initials}} 
+                </button>
+                /
+                <button class="btn btn primary" (click)="setTo(guardDutyUsersTo[3])"> 
+                  {{guardDutyUsersTo[3].initials}} 
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3">
+                Sidder over:  
+                  <button class="btn btn primary" (click)="setTo(guardDutyUsersTo[4])"> 
+                    {{guardDutyUsersTo[4].initials}} 
+                  </button>
+              </td>
+            </tr>
+          </tfoot>
+      </table>
+      <div class="row">
+        <div class="col-lg-8 col-xs-12">
+          <button class="btn btn-success float-left" [disabled]="weeksBetweenDatesTo < 2" (click)="moveToBackward()"><span aria-hidden="true"> &larr;</span> Tidligere</button>
+          <button class="btn btn-success float-right" (click)="moveToForward()">Næste <span aria-hidden="true"> &rarr;</span> </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button (click)="saveSwitch()">Save</button>
+</div>
+
+
+

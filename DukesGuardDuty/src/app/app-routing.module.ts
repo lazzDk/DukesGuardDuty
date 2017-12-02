@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from './auth-guard.service';
 import { AdminComponent } from './admin/admin.component';
 import { GuardDutyComponent } from './guard-duty/guard-duty.component';
+import { GuardDutySwitchComponent } from './guard-duty/guard-duty-switch/guard-duty-switch.component';
 import { ScheduleSetupComponent } from './schedule-setup/schedule-setup.component';
 import { UserComponent } from './user/user.component';
 
@@ -15,6 +16,10 @@ const appRoutes:Routes =  [
     {
         path: 'guardDuty',
         component: GuardDutyComponent
+    },
+    {
+        path: 'guardDutyswitch',
+        component: GuardDutySwitchComponent
     },
     {
         path: 'schedulesetup',
