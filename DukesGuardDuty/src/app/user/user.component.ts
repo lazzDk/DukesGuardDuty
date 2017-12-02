@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { AuthService } from './../auth/auth.service';
 import { User } from './user.model';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-user',
@@ -12,18 +13,10 @@ import { User } from './user.model';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  userCollection: AngularFirestoreCollection<User>;
   users: Observable<User[]>;
 
-  constructor(private db: AngularFirestore, public authService: AuthService){
-    this.userCollection = db.collection<User>('Users', ref => ref.orderBy('index'));
-    this.users = this.userCollection.snapshotChanges().map(actions => {
-      return actions.map(action => {
-        const data = action.payload.doc.data() as User;
-        const id = action.payload.doc.id;
-        return { id, ...data };
-      });
-    });
+  constructor(public authService: AuthService, private userService: UserService){
+    this.users = this.userService.getMappedUsers();
   }
 
   ngOnInit() {
@@ -31,7 +24,7 @@ export class UserComponent implements OnInit {
  
   deleteUser(user:User){
     if(confirm("Er du sikker på, at du vil slette "+user.name)) {
-      this.userCollection.doc(user.id).delete(); 
+      this.userService.deleteUser(user); 
     }
   }
 

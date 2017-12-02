@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AngularFirestore, AngularFirestoreCollection} from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
   
 import { IMyDpOptions, IMyDateModel } from 'mydatepicker';
 
 import { ScheduleSetup } from './../schedule-setup/schedule-setup.model';
+import { ScheduleSetupService } from './../schedule-setup/schedule-setup.service';
 import { User } from './../user/user.model';
+import { UserService } from './../user/user.service';
 
 @Component({
   selector: 'app-guard-duty',
@@ -16,14 +17,9 @@ import { User } from './../user/user.model';
 export class GuardDutyComponent implements OnInit {
   scheduleSetup: ScheduleSetup;
   startWeek:number = 0;
-  maxWeeksInStartYear: number = 52; 
-  scheduleUsers: User[];
+  maxWeeksInStartYear: number = 52;  
+  guardDutyUsers: User[];
   weeksBetweenDates: number = 0;
-
-  scheduleSetupCollection: AngularFirestoreCollection<ScheduleSetup>;
-  scheduleSetups: Observable<ScheduleSetup[]>; 
-
-  userCollection: AngularFirestoreCollection<User>;
   users: User[];
 
   myDatePickerOptions: IMyDpOptions = {
@@ -34,39 +30,23 @@ export class GuardDutyComponent implements OnInit {
     monthLabels: { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'Maj', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Okt', 11: 'Nov', 12: 'Dec' }
   }
 
-  hasFetchedUsers:boolean = false;
-  hasFetchedSchedule:boolean = false;
-
-  constructor(private db: AngularFirestore) {
-    this.scheduleSetupCollection = db.collection<ScheduleSetup>('ScheduleSetup', ref => ref.where('startDate', '<=', Date.now()).orderBy('startDate'));
-    this.scheduleSetupCollection.valueChanges().subscribe(setups => {
-        this.scheduleSetup = setups != null && setups.length > 0 ? setups[0] : null;
-        if(this.scheduleSetup != null){
-          this.scheduleUsers = this.scheduleSetup.users.slice();
-          this.setStartDateInfo();
-          this.hasFetchedSchedule = true;
-          this.runDefault();
-        }
-    });
-
-    this.userCollection = db.collection<User>('Users');
-    this.userCollection.valueChanges().subscribe(users => {
-      this.users = users;
-      this.hasFetchedUsers = true;
-      this.runDefault();
+  constructor(private scheduleSetupService: ScheduleSetupService, private userService: UserService) {
+    this.scheduleSetupService.getScheduleSetups().subscribe(setups => {
+      this.scheduleSetup = setups != null && setups.length > 0 ? setups[0] : null;
+      if(this.scheduleSetup != null){
+        this.setStartDateInfo();
+        this.setScheduleForCurrentWeek();
+      }
     });
    }
 
   ngOnInit() {
-    
   }
 
-  runDefault(){
-    if(!this.hasFetchedUsers || !this.hasFetchedSchedule)
-      return
+  setScheduleForCurrentWeek(){
     let today = new Date();
     this.resetDate(today);
-    this.weeksBetweenDates = this.getWeeksBetweenTwoDates(new Date(this.scheduleSetup.startDate), today);
+    this.weeksBetweenDates = this.getWeeksBetweenDates(new Date(this.scheduleSetup.startDate), today);
     this.calculateTeams();
   }
 
@@ -75,7 +55,7 @@ export class GuardDutyComponent implements OnInit {
     date.setDate(date.getDate() + 4 - (date.getDay()||7));
   }
   
-  getWeekNumbers(date) {
+  getWeekNumber(date) {
     date = new Date(+date);
     this.resetDate(date);
     var yearStart = new Date(date.getFullYear(),0,1);
@@ -85,13 +65,13 @@ export class GuardDutyComponent implements OnInit {
 
   getWeeksInYear(year) {
     var lastDayOfYear = new Date(year, 11, 31);
-    var week = this.getWeekNumbers(lastDayOfYear);
-    return week == 1? this.getWeekNumbers(lastDayOfYear.setDate(24)) : week;
+    var week = this.getWeekNumber(lastDayOfYear);
+    return week == 1? this.getWeekNumber(lastDayOfYear.setDate(24)) : week;
   }
 
-  getWeekNumber(week:number){
+  getWeekNumberViewFriendly(week:number){
     let maxWeeks = this.startWeek + this.weeksBetweenDates + week;
-     return maxWeeks > this.maxWeeksInStartYear ? maxWeeks - this.maxWeeksInStartYear : maxWeeks;
+    return maxWeeks > this.maxWeeksInStartYear ? maxWeeks - this.maxWeeksInStartYear : maxWeeks;
   }
 
   setStartDateInfo() {
@@ -104,23 +84,22 @@ export class GuardDutyComponent implements OnInit {
   swapItems(array: any, firstIndex:number, secondIndex:number) {
     if(array == null || firstIndex < 0 || firstIndex >= array.length || secondIndex < 0 || secondIndex >= array.length)
      return;
-
     var temp = array[firstIndex];
     array[firstIndex] = array[secondIndex];
     array[secondIndex] = temp; 
   }
 
-  getWeeksBetweenTwoDates(date1: Date, date2: Date) {
+  getWeeksBetweenDates(startDate: Date, endDate: Date) {
     var WEEK = 1000 * 60 * 60 * 24 * 7;
-    date1.setHours(0,0,0,0);
-    date2.setHours(0,0,0,0);
-    var date1ms = date1.getTime();
-    var date2ms = date2.getTime();
-    var diff = Math.abs(date2ms - date1ms);
-    return Math.floor(diff / WEEK);
+    startDate.setHours(0,0,0,0);
+    endDate.setHours(0,0,0,0);
+    var startDateMs = startDate.getTime();
+    var endDateMs = endDate.getTime();
+    var differenceInMs = Math.abs(endDateMs - startDateMs);
+    return Math.floor(differenceInMs / WEEK);
   } 
 
-  switchTeams(array: any,index:number) {
+  switchDayForTeams(array: any,index:number) {
     var temp0 = array[index];
     var temp1 = array[index+1];
 
@@ -131,51 +110,62 @@ export class GuardDutyComponent implements OnInit {
     array[index+3] = temp1;
   }
 
+  isEvenWeek():boolean {
+    return this.weeksBetweenDates % 2 == 0;
+  }
+
+  switchTeamsForNRounds(users: User[], nRounds:number) {
+    let outSiderIndex = 8;
+    let timeToSwitch = 0;
+    for(let rounds = 0; rounds < nRounds; rounds++) {
+      this.swapItems(users, timeToSwitch, outSiderIndex);
+      timeToSwitch++;
+    }
+  }
+
+  composeUnevenWeekTeam(previousWeekUsers: User[], currenWeekUsers: User[]): User[]{
+    return previousWeekUsers.slice(4, 8).concat(currenWeekUsers.slice(0,4).concat(currenWeekUsers.slice(8, 9)));
+  }
+
+  isWeekForSwitchingDay(weeksForIteration:number):boolean{
+    return weeksForIteration === 2 || (weeksForIteration > 1 && weeksForIteration % 4 == 2);
+  };
+
+  getDefaultScheduleSetupUserArray():User[]{
+    return this.scheduleSetup.users.slice();
+  }
+
   calculateTeams() {
-    let outSiderIndex = this.users.length - 1;
-    if(this.weeksBetweenDates % 2 == 0) {
-      let timeToSwitch = 0;
-      this.scheduleUsers = this.scheduleSetup.users.slice(); 
-      for(let rounds = 0; rounds < this.weeksBetweenDates; rounds++) {
-        this.swapItems(this.scheduleUsers, timeToSwitch, outSiderIndex);
-        timeToSwitch++;
-      }
-      if(this.weeksBetweenDates === 2 || (this.weeksBetweenDates > 1 && this.weeksBetweenDates % 4 == 2)) {
-        this.switchTeams(this.scheduleUsers,0);
-        this.switchTeams(this.scheduleUsers,4);
+    if(this.isEvenWeek()) {
+      this.guardDutyUsers = this.getDefaultScheduleSetupUserArray();
+      this.switchTeamsForNRounds(this.guardDutyUsers, this.weeksBetweenDates);
+      if(this.isWeekForSwitchingDay(this.weeksBetweenDates)) {
+        this.switchDayForTeams(this.guardDutyUsers, 0);
+        this.switchDayForTeams(this.guardDutyUsers, 4);
       }
     }
     else {
-      let previousIterationUsers = this.scheduleUsers.slice();
-      let timeToSwitchPrevious = 0;
-      for(let rounds = 0; rounds < this.weeksBetweenDates - 1; rounds++) {
-        this.swapItems(previousIterationUsers, timeToSwitchPrevious, outSiderIndex);
-        timeToSwitchPrevious++;
-      }
-      let previousIterationWeeks = this.weeksBetweenDates - 1;
-      if(previousIterationWeeks === 2 || (previousIterationWeeks > 1 && previousIterationWeeks % 4 == 2)) {
-        this.switchTeams(previousIterationUsers, 4);
+      let previousIterationUsers = this.getDefaultScheduleSetupUserArray();
+      this.switchTeamsForNRounds(previousIterationUsers, this.weeksBetweenDates- 1);
+      let previousIterationWeek = this.weeksBetweenDates - 1;
+      if(this.isWeekForSwitchingDay(previousIterationWeek)) {
+        this.switchDayForTeams(previousIterationUsers, 4);
       }
      
-      let timeToSwitchCurrent = 0;
-      let currentIterationUsers = this.scheduleUsers.slice();
-      for(let rounds = 0; rounds < this.weeksBetweenDates; rounds++) {
-        this.swapItems(currentIterationUsers, timeToSwitchCurrent, outSiderIndex);
-        timeToSwitchCurrent++;
+      let currentIterationUsers = this.getDefaultScheduleSetupUserArray();
+      this.switchTeamsForNRounds(currentIterationUsers, this.weeksBetweenDates);
+      let nextIterationWeek = this.weeksBetweenDates + 1;
+      if(this.isWeekForSwitchingDay(nextIterationWeek)) {
+        this.switchDayForTeams(currentIterationUsers, 0);
       }
-      let nextIterationWeeks = this.weeksBetweenDates + 1;
-      if(nextIterationWeeks === 2 || (nextIterationWeeks > 1 && nextIterationWeeks % 4 == 2)) {
-        this.switchTeams(currentIterationUsers,0);
-      }
-
-      this.scheduleUsers = previousIterationUsers.slice(4, 8).concat(currentIterationUsers.slice(0,4).concat(currentIterationUsers.slice(8, 9))) ;
+      this.guardDutyUsers = this.composeUnevenWeekTeam(previousIterationUsers, currentIterationUsers);
     }
   }
 
   onDateChanged(event: IMyDateModel){
-    if(this.users == null || this.users.length == 0 || event == null || event.jsdate == null)
+    if(event == null || event.jsdate == null)
       return;
-    this.weeksBetweenDates = this.getWeeksBetweenTwoDates(new Date(this.scheduleSetup.startDate), new Date(event.jsdate));
+    this.weeksBetweenDates = this.getWeeksBetweenDates(new Date(this.scheduleSetup.startDate), new Date(event.jsdate));
     this.calculateTeams();
   }
 

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
-
 import { User } from './../user.model';
+import { UserService } from './../user.service';
 
 @Component({
   selector: 'app-user-creation',
@@ -11,23 +9,17 @@ import { User } from './../user.model';
   styleUrls: ['./user-creation.component.css']
 })
 export class UserCreationComponent implements OnInit {
-  userCollection: AngularFirestoreCollection<User>;
   userName: string;
   userInitials: string;
   lastIndex :number = 0;
 
-  constructor(private db: AngularFirestore){
-    this.userCollection = db.collection<User>('Users', ref => ref.orderBy('index'));
-    this.userCollection.valueChanges().subscribe(users => {
-      this.lastIndex = users[users.length-1].index +  1;
-    })
-  }
+  constructor(private userService: UserService){  }
 
   ngOnInit() {
   }
 
   addUser(){
-    this.userCollection.add({name: this.userName, initials: this.userInitials, index: this.lastIndex});
+    this.userService.addUser(this.userName, this.userInitials);
     this.userName = '';
     this.userInitials =  '';
   }

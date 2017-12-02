@@ -9,14 +9,18 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { MyDatePickerModule  } from 'mydatepicker';
 
+import { AdminComponent } from './admin/admin.component';
+import { AccessService } from './admin/access.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './auth/auth.service';
-import { UserComponent } from './user/user.component';
 import { GuardDutyComponent } from './guard-duty/guard-duty.component';
-import { UserCreationComponent } from './user/user-creation/user-creation.component';
 import { ScheduleSetupComponent } from './schedule-setup/schedule-setup.component';
-import { AdminComponent } from './admin/admin.component';
+import { ScheduleSetupService } from './schedule-setup/schedule-setup.service';
+import { UserComponent } from './user/user.component';
+import { UserCreationComponent } from './user/user-creation/user-creation.component';
+import { UserService } from './user/user.service';
+import { GuardDutySwitchComponent } from './guard-duty/guard-duty-switch/guard-duty-switch.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,8 @@ import { AdminComponent } from './admin/admin.component';
     GuardDutyComponent,
     UserCreationComponent,
     ScheduleSetupComponent,
-    AdminComponent
+    AdminComponent,
+    GuardDutySwitchComponent
   ],
   imports: [
     AppRoutingModule,
@@ -37,7 +42,10 @@ import { AdminComponent } from './admin/admin.component';
     MyDatePickerModule
   ],
   providers: [ 
-    AuthService
+    AccessService,
+    AuthService,
+    ScheduleSetupService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

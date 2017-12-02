@@ -1,7 +1,7 @@
 <div class="row" *ngIf="scheduleSetup != null">
   <div class="col-lg-6 col-xs-12">
     <h5>
-        Valgt uge <span class="badge badge-dark">{{getWeekNumber(0)}}</span>
+        Valgt uge <span class="badge badge-dark">{{getWeekNumberViewFriendly(0)}}</span>
     </h5>
   </div>
 </div>
@@ -27,36 +27,36 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Uge {{getWeekNumber(0)}}</strong></td>
+            <td><strong>Uge {{getWeekNumberViewFriendly(0)}}</strong></td>
             <td>
-              {{scheduleUsers[0].initials}}
+              {{guardDutyUsers[0].initials}}
               /
-              {{scheduleUsers[1].initials}} 
+              {{guardDutyUsers[1].initials}} 
             </td>
             <td>
-              {{scheduleUsers[2].initials}}
+              {{guardDutyUsers[2].initials}}
               /
-              {{scheduleUsers[3].initials}} 
+              {{guardDutyUsers[3].initials}} 
             </td>
           </tr>
           <tr>
-              <td><strong>Uge {{getWeekNumber(1)}}</strong></td>
+              <td><strong>Uge {{getWeekNumberViewFriendly(1)}}</strong></td>
               <td>
-                {{scheduleUsers[4].initials}}
+                {{guardDutyUsers[4].initials}}
                 /
-                {{scheduleUsers[5].initials}} 
+                {{guardDutyUsers[5].initials}} 
               </td>
               <td>
-                {{scheduleUsers[6].initials}}
+                {{guardDutyUsers[6].initials}}
                 /
-                {{scheduleUsers[7].initials}} 
+                {{guardDutyUsers[7].initials}} 
               </td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <td colspan="3">
-              Sidder over: {{scheduleUsers[8].initials}}
+              Sidder over: {{guardDutyUsers[8].initials}}
             </td>
           </tr>
         </tfoot>

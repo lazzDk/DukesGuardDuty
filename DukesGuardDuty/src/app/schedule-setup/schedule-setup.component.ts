@@ -1,26 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AngularFirestore, AngularFirestoreCollection} from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
 import { IMyDpOptions, IMyDateModel } from 'mydatepicker';
 
 import { ScheduleSetup } from './schedule-setup.model';
 import { User } from './../user/user.model';
+import { UserService} from './../user/user.service';
+import { ScheduleSetupService } from './schedule-setup.service';
 
 @Component({
   selector: 'app-schedule-setup',
   templateUrl: './schedule-setup.component.html',
   styleUrls: ['./schedule-setup.component.css']
-})
+}) 
+
 export class ScheduleSetupComponent implements OnInit {
   weeks: number[] = [44, 45, 46, 47, 48];
   scheduleSetup: ScheduleSetup;
   saved:boolean = false;
-  scheduleSetupCollection: AngularFirestoreCollection<ScheduleSetup>;
   scheduleSetups: Observable<ScheduleSetup[]>;
 
-  userCollection: AngularFirestoreCollection<User>;
   users: Observable<User[]>;
 
   myDatePickerOptions: IMyDpOptions = {
@@ -31,17 +31,9 @@ export class ScheduleSetupComponent implements OnInit {
     monthLabels: { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'Maj', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Okt', 11: 'Nov', 12: 'Dec' }
   }
 
- constructor(private db: AngularFirestore){
-    this.userCollection = db.collection<User>('Users');
-    this.users = this.userCollection.snapshotChanges().map(actions => {
-      return actions.map(action => {
-        const data = action.payload.doc.data() as User;
-        const id = action.payload.doc.id;
-        return { id, ...data };
-      });
-    });
-    this.scheduleSetupCollection = db.collection<ScheduleSetup>('ScheduleSetup');
-    this.scheduleSetups = this.scheduleSetupCollection.valueChanges();
+ constructor(private scheduleSetupService: ScheduleSetupService, private userService: UserService){
+    this.users = this.userService.getUsers();
+    this.scheduleSetups = this.scheduleSetupService.getScheduleSetups();
   }
 
   ngOnInit() {
@@ -70,7 +62,7 @@ export class ScheduleSetupComponent implements OnInit {
   }
 
   saveSchedule(){ 
-    this.scheduleSetupCollection.add(this.scheduleSetup);
+    this.scheduleSetupService.addScheduleSetup(this.scheduleSetup);
     this.saved = true;
   }
 }

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+ 
 import { Observable } from 'rxjs/Observable';
 
 import { AccessRequest } from './access-request.model';
 import { AccessConfirmation } from './access-confirmation.model';
 import { AuthService } from './../auth/auth.service';
+import { AccessService } from './access.service';
 
 @Component({
   selector: 'app-admin',
@@ -13,32 +13,12 @@ import { AuthService } from './../auth/auth.service';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  accessRequestCollection: AngularFirestoreCollection<AccessRequest>;
   accessRequests: Observable<AccessRequest[]>;
-
-  accessConfirmationCollection: AngularFirestoreCollection<AccessConfirmation>;
   accessConfirmations: Observable<AccessConfirmation[]>;
 
-  constructor(private db: AngularFirestore, public authService: AuthService) {
-    this.accessRequestCollection = db.collection<AccessRequest>('AccessRequests');
-    this.accessRequests = this.accessRequestCollection.snapshotChanges().map(actions => {
-      return actions.map(action => {
-        const data = action.payload.doc.data() as AccessRequest;
-        const id = action.payload.doc.id;
-        return { id, ...data };
-      });
-    });
-
-    this.accessConfirmationCollection = db.collection<AccessConfirmation>('AccessConfirmations');
-    this.accessConfirmations = this.accessConfirmationCollection.snapshotChanges().map(actions => {
-      return actions.map(action => {
-        const data = action.payload.doc.data() as AccessConfirmation;
-        const id = action.payload.doc.id;
-        return { id, ...data };
-      });
-    });
-
-
+  constructor(private accessService: AccessService, public authService: AuthService) {
+    this.accessRequests = this.accessService.getAccessRequests();
+    this.accessConfirmations = this.accessService.getAccessConfirmations();
    }
 
   ngOnInit() {
@@ -46,20 +26,20 @@ export class AdminComponent implements OnInit {
 
   approveRequest(request: AccessRequest){
     if(confirm("Er du sikker på, at du vil godkende "+request.displayName)) {
-      this.accessConfirmationCollection.add({displayName: request.displayName, userId: request.userId, approvedById: this.authService.uid});
-      this.accessRequestCollection.doc(request.id).delete();
+      this.accessService.addAccessConfirmation(request.displayName,request.userId, this.authService.uid);
+      this.accessService.deleteAccessRequest(request);
     }
   }
 
   deleteRequest(request: AccessRequest){
     if(confirm("Er du sikker på, at du vil slette denne request fra "+request.displayName)) {
-      this.accessRequestCollection.doc(request.id).delete(); 
+      this.accessService.deleteAccessRequest(request);
     }
   }  
   
   removeAccess(confirmation: AccessConfirmation){
     if(confirm("Er du sikker på, at du vil fjerne adgang fra "+confirmation.displayName)) {
-      this.accessConfirmationCollection.doc(confirmation.id).delete(); 
+      this.accessService.deleteAccessConfirmation(confirmation); 
     }
   }
 
