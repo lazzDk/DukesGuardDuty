@@ -8,22 +8,22 @@
   
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-            <a class="navbar-brand" routerLink="/users" routerLinkActive="link-active">Medlemmer</a>
+        <li class="nav-item">
+            <a class="nav-link" routerLink="/users" routerLinkActive="link-active">Medlemmer</a>
         </li>
         <li class="nav-item">
-            <a class="navbar-brand" routerLink="/guardDuty" routerLinkActive="link-active">Vagtplan</a>
+            <a class="nav-link" routerLink="/guardDuty" routerLinkActive="link-active">Vagtplan</a>
         </li>
-        <li class="nav-item">
-          <a class="navbar-brand" routerLink="/guardDutyswitch" routerLinkActive="link-active">skift</a>
-      </li>
-        <li class="nav-item">
-            <a *ngIf="(authService.isAuthed)" class="navbar-brand" routerLink="/schedulesetup" routerLinkActive="link-active">Opsætning</a>
+        <li class="nav-item" *ngIf="(authService.isAuthed)">
+          <a class="nav-link" routerLink="/guardDutyswitch" routerLinkActive="link-active">Vagtskifte</a>
         </li>
-        <li class="nav-item">
-          <a *ngIf="(authService.isAuthed)" class="navbar-brand" routerLink="/admin" routerLinkActive="link-active">Admin</a>
-      </li>
-        
+        <li class="nav-item dropdown" *ngIf="(authService.isAuthed)">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Opsætning</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" routerLink="/schedulesetup" routerLinkActive="link-active">Vagtskema</a>
+            <a class="dropdown-item" routerLink="/admin" routerLinkActive="link-active">Godkendelser</a>
+          </div>
+        </li>
       </ul>
       <div class="my-lg-0">
         <div class="d-inline" *ngIf="(authService.user | async)">

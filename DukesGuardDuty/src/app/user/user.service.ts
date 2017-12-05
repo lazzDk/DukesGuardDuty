@@ -8,8 +8,8 @@ import { User } from './user.model';
 
 @Injectable()
 export class UserService {
-  userCollection: AngularFirestoreCollection<User>;
-  users: Observable<User[]>;
+  private userCollection: AngularFirestoreCollection<User>;
+  private users: Observable<User[]>;
   constructor(private db: AngularFirestore) {
     this.userCollection = db.collection<User>('Users', ref => ref.orderBy('name'));
     this.users = this.userCollection.snapshotChanges().map(actions => {

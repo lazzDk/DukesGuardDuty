@@ -8,11 +8,11 @@ import { AccessConfirmation } from './access-confirmation.model';
 
 @Injectable()
 export class AccessService {
-  accessRequestCollection: AngularFirestoreCollection<AccessRequest>;
-  accessRequests: Observable<AccessRequest[]>;
+  private accessRequestCollection: AngularFirestoreCollection<AccessRequest>;
+  private accessRequests: Observable<AccessRequest[]>;
 
-  accessConfirmationCollection: AngularFirestoreCollection<AccessConfirmation>;
-  accessConfirmations: Observable<AccessConfirmation[]>;
+  private accessConfirmationCollection: AngularFirestoreCollection<AccessConfirmation>;
+  private accessConfirmations: Observable<AccessConfirmation[]>;
   
   constructor(private db: AngularFirestore) {
     this.accessRequestCollection = db.collection<AccessRequest>('AccessRequests');

@@ -1,18 +1,17 @@
-<div class="row">
+<div class="row" *ngIf="scheduleSetup != null">
   <div class="col-lg-6 col-xs-12">
       <div class="input-group">
-          <span class="input-group-addon" id="from-date-name">Skift fra uge:</span>
+          <span class="input-group-addon" id="from-date-name">Skift fra uge</span>
           <my-date-picker class="form-control" [options]="myDatePickerOptions" (dateChanged)="onFromDateChanged($event)" aria-describedby="from-date-name"></my-date-picker>
       </div>
    </div>
    <div class="col-lg-6 col-xs-12">
     <div class="input-group">
-        <span class="input-group-addon" id="to-date-name">Skift til uge:</span>
+        <span class="input-group-addon" id="to-date-name">Skift til uge</span>
         <my-date-picker class="form-control" [options]="myDatePickerOptions" (dateChanged)="onToDateChanged($event)" aria-describedby="to-date-name"></my-date-picker>
     </div>
  </div>
 </div>
-
 <div *ngIf="scheduleSetup != null">
   <div class="row">
     <div class="col-lg-6 col-xs-12" *ngIf="guardDutyUsersFrom != null">
@@ -28,20 +27,20 @@
           <tr>
             <td><strong>Uge {{getWeekNumberViewFriendly(0, weeksBetweenDatesFrom)}}</strong></td>
             <td>
-              <button class="btn btn primary" (click)="setFrom(guardDutyUsersFrom[0])"> 
+              <button class="btn" [ngClass]="{'btn-success': switchFromUser == guardDutyUsersFrom[0]}" (click)="setFrom(guardDutyUsersFrom[0])"> 
                {{guardDutyUsersFrom[0].initials}}
               </button>
               /
-              <button class="btn btn primary" (click)="setFrom(guardDutyUsersFrom[1])"> 
+              <button class="btn" [ngClass]="{'btn-success': switchFromUser == guardDutyUsersFrom[1]}" (click)="setFrom(guardDutyUsersFrom[1])"> 
                 {{guardDutyUsersFrom[1].initials}} 
               </button>
             </td>
             <td>
-              <button class="btn btn primary" (click)="setFrom(guardDutyUsersFrom[2])"> 
+              <button class="btn" [ngClass]="{'btn-success': switchFromUser == guardDutyUsersFrom[2]}" (click)="setFrom(guardDutyUsersFrom[2])"> 
                 {{guardDutyUsersFrom[2].initials}} 
               </button>
               /
-              <button class="btn btn primary" (click)="setFrom(guardDutyUsersFrom[3])"> 
+              <button class="btn" [ngClass]="{'btn-success': switchFromUser == guardDutyUsersFrom[3]}" (click)="setFrom(guardDutyUsersFrom[3])"> 
                 {{guardDutyUsersFrom[3].initials}} 
               </button>
             </td>
@@ -51,7 +50,7 @@
           <tr>
             <td colspan="3">
               Sidder over:  
-                <button class="btn btn primary" (click)="setFrom(guardDutyUsersFrom[4])"> 
+                <button class="btn" [ngClass]="{'btn-success': switchFromUser == guardDutyUsersFrom[4]}" (click)="setFrom(guardDutyUsersFrom[4])"> 
                   {{guardDutyUsersFrom[4].initials}} 
                 </button>
             </td>
@@ -59,9 +58,9 @@
         </tfoot>
       </table>
       <div class="row">
-        <div class="col-lg-8 col-xs-12">
-          <button class="btn btn-success float-left" [disabled]="weeksBetweenDatesTo == 0" (click)="moveFromBackward()"><span aria-hidden="true"> &larr;</span> Tidligere</button>
-          <button class="btn btn-success float-right" (click)="moveFromForward()">Næste <span aria-hidden="true"> &rarr;</span> </button>
+        <div class="col-lg-12 col-xs-12">
+          <button class="btn btn-outline-success float-left" [disabled]="weeksBetweenDatesFrom == 0" (click)="moveFromBackward()"><span aria-hidden="true"> &larr;</span> Tidligere</button>
+          <button class="btn btn-outline-success float-right" (click)="moveFromForward()">Næste <span aria-hidden="true"> &rarr;</span> </button>
         </div>
       </div>
     </div>
@@ -78,20 +77,20 @@
             <tr>
               <td><strong>Uge {{getWeekNumberViewFriendly(0, weeksBetweenDatesTo)}}</strong></td>
               <td>
-                <button class="btn btn primary" (click)="setTo(guardDutyUsersTo[0])"> 
+                <button class="btn" [ngClass]="{'btn-success': switchToUser == guardDutyUsersTo[0]}" (click)="setTo(guardDutyUsersTo[0])"> 
                  {{guardDutyUsersTo[0].initials}}
                 </button>
                 /
-                <button class="btn btn primary" (click)="setTo(guardDutyUsersTo[1])"> 
+                <button class="btn" [ngClass]="{'btn-success': switchToUser == guardDutyUsersTo[1]}" (click)="setTo(guardDutyUsersTo[1])"> 
                   {{guardDutyUsersTo[1].initials}} 
                 </button>
               </td>
               <td>
-                <button class="btn btn primary" (click)="setTo(guardDutyUsersTo[2])"> 
+                <button class="btn" [ngClass]="{'btn-success': switchToUser == guardDutyUsersTo[2]}" (click)="setTo(guardDutyUsersTo[2])"> 
                   {{guardDutyUsersTo[2].initials}} 
                 </button>
                 /
-                <button class="btn btn primary" (click)="setTo(guardDutyUsersTo[3])"> 
+                <button class="btn" [ngClass]="{'btn-success': switchToUser == guardDutyUsersTo[3]}" (click)="setTo(guardDutyUsersTo[3])"> 
                   {{guardDutyUsersTo[3].initials}} 
                 </button>
               </td>
@@ -101,7 +100,7 @@
             <tr>
               <td colspan="3">
                 Sidder over:  
-                  <button class="btn btn primary" (click)="setTo(guardDutyUsersTo[4])"> 
+                  <button class="btn" [ngClass]="{'btn-success': switchToUser == guardDutyUsersTo[4]}" (click)="setTo(guardDutyUsersTo[4])"> 
                     {{guardDutyUsersTo[4].initials}} 
                   </button>
               </td>
@@ -109,15 +108,49 @@
           </tfoot>
       </table>
       <div class="row">
-        <div class="col-lg-8 col-xs-12">
-          <button class="btn btn-success float-left" [disabled]="weeksBetweenDatesTo < 2" (click)="moveToBackward()"><span aria-hidden="true"> &larr;</span> Tidligere</button>
-          <button class="btn btn-success float-right" (click)="moveToForward()">Næste <span aria-hidden="true"> &rarr;</span> </button>
+        <div class="col-lg-12 col-xs-12">
+          <button class="btn btn-outline-success float-left" [disabled]="weeksBetweenDatesTo < 2" (click)="moveToBackward()"><span aria-hidden="true"> &larr;</span> Tidligere</button>
+          <button class="btn btn-outline-success float-right" (click)="moveToForward()">Næste <span aria-hidden="true"> &rarr;</span> </button>
         </div>
       </div>
     </div>
   </div>
-  <button (click)="saveSwitch()">Save</button>
+  <div class="row" *ngIf="switchFromUser != null && switchToUser != null" >
+    <div class="col-lg-12 col-xs-12">
+      <br/>
+      <button class="btn btn-success btn-lg btn-block" (click)="saveSwitch()">Gem vagtskifte</button>
+      <div class="alert alert-danger" *ngIf="errorMessage != ''">
+        {{errorMessage}}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-lg-12">
+      &nbsp;
+      </div>
+    </div>
+    <div class="row">
+    <div class="col-xs-12 col-lg-12">
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Medlem</th>
+            <th>fra uge</th>
+            <th>Medlem</th>
+            <th>til uge</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dutySwitch of guardDutySwitches">
+            <td>{{dutySwitch.fromUser.initials}}</td>
+            <td>{{getWeekNumberViewFriendly(0, dutySwitch.fromWeek)}}</td>
+            <td>{{dutySwitch.toUser.initials}}</td>
+            <td>{{getWeekNumberViewFriendly(0, dutySwitch.toWeek) }}</td>
+            <td><button class="btn btn-danger" (click)="deleteSwitch(dutySwitch)">Slet</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-
-
-

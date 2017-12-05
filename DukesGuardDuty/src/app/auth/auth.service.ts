@@ -18,14 +18,14 @@ export class AuthService {
   isAuthed: boolean = false;
   uid:string = '';
 
-  accessRequestCollection: AngularFirestoreCollection<AccessRequest>;
-  accessRequests: AccessRequest[] = [];
+  private accessRequestCollection: AngularFirestoreCollection<AccessRequest>;
+  private accessRequests: AccessRequest[] = [];
 
-  accessConfirmationCollection: AngularFirestoreCollection<AccessConfirmation>;
-  accessConfirmations: AccessConfirmation[] = [];
+  private accessConfirmationCollection: AngularFirestoreCollection<AccessConfirmation>;
+  private accessConfirmations: AccessConfirmation[] = [];
 
-  accessRequestsFetched: boolean = false;
-  accessConfirmationsFetched: boolean = false;
+  private accessRequestsFetched: boolean = false;
+  private accessConfirmationsFetched: boolean = false;
  
   constructor(private firebaseAuth: AngularFireAuth, private db: AngularFirestore, private router: Router) { 
     this.user = firebaseAuth.authState;

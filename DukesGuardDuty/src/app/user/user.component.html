@@ -1,8 +1,8 @@
 
 <div class="row">
   <div class="col-md-12 col-lg-12">
-    <table class="table">
-        <thead>
+    <table class="table table-striped">
+        <thead class="thead-dark">
           <tr>
             <th>Navn</th>
             <th>Initialer</th>
@@ -16,7 +16,7 @@
               <td>{{user.initials}}</td>
               <!-- <td>{{user.index}} </td>-->
               <td>
-                <button *ngIf="(authService.isAuthed)" class="btn btn-danger" (click)="deleteUser(user)"> <span aria-hidden="true">&times;</span> Slet</button>
+                <button *ngIf="(authService.isAuthed)" class="btn btn-danger" (click)="deleteUser(user)">Slet</button>
               </td>
           </tr>
         </tbody>

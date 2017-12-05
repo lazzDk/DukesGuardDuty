@@ -4,5 +4,9 @@
 
 .link-active:hover {
     color: #24890d !important;
+}
+
    
+.mydp .caltable tbody tr:hover td{
+    background-color: green !important;
 }

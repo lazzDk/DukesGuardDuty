@@ -1,0 +1,4 @@
+
+.mydp .caltable tbody tr:hover td{
+    background-color: green !important;
+}

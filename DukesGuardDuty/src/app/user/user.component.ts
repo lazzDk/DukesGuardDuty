@@ -15,11 +15,13 @@ import { UserService } from './user.service';
 export class UserComponent implements OnInit {
   users: Observable<User[]>;
 
-  constructor(public authService: AuthService, private userService: UserService){
-    this.users = this.userService.getMappedUsers();
+  constructor(
+    public authService: AuthService,  
+    private userService: UserService){
   }
 
   ngOnInit() {
+    this.users = this.userService.getMappedUsers();
   }
  
   deleteUser(user:User){
