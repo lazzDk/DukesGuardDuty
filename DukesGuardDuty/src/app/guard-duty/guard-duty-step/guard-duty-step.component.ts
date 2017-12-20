@@ -23,7 +23,7 @@ import { DatePickerOptionService } from './../../shared/date-picker-option.servi
 })
 
 export class GuardDutyStepComponent implements OnInit, OnChanges, OnDestroy {
-  scheduleSetup: ScheduleSetup;
+  @Input() scheduleSetup: ScheduleSetup;
   startWeek:number = 0;
   maxWeeksInStartYear: number = 52;  
   guardDutyUsers: User[];
@@ -46,20 +46,16 @@ export class GuardDutyStepComponent implements OnInit, OnChanges, OnDestroy {
     this.guardDutySubscription = this.guardDutySwitchService.getGuardDutySwitches().subscribe(switches => {
       this.guardDutySwitches = switches;
     });
-    this.scheduleSetupSubscription = this.scheduleSetupService.getScheduleSetups().subscribe(setups => {
-      this.scheduleSetup = setups != null && setups.length > 0 ? setups[0] : null;
-      if(this.scheduleSetup != null){
-        this.setStartDateInfo();
-        this.setScheduleForCurrentWeek();
-      }
-    });
+    if(this.scheduleSetup != null){
+      this.setStartDateInfo();
+      this.setScheduleForCurrentWeek();
+    }
   }
 
   ngOnDestroy(){
     if(this.guardDutySubscription != null)
       this.guardDutySubscription.unsubscribe ();
-    if(this.scheduleSetupSubscription != null)
-      this.scheduleSetupSubscription.unsubscribe();
+   
   }
 
   setScheduleForCurrentWeek(){

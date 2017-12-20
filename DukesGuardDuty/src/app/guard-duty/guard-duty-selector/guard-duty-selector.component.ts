@@ -1,22 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { ISubscription } from "rxjs/Subscription";
 
 import { IMyDpOptions, IMyDateModel } from 'mydatepicker';
 import { DatePickerOptionService } from './../../shared/date-picker-option.service';
+
+import { ScheduleSetup } from './../../schedule-setup/schedule-setup.model';
+import { ScheduleSetupService } from './../../schedule-setup/schedule-setup.service';
 
 @Component({
   selector: 'app-guard-duty-selector',
   templateUrl: './guard-duty-selector.component.html',
   styleUrls: ['./guard-duty-selector.component.css']
 })
-export class GuardDutySelectorComponent implements OnInit {
+export class GuardDutySelectorComponent implements OnInit, OnDestroy {
   chosenDates:number[] = [];
-  myDatePickerOptions: IMyDpOptions; 
-
-  constructor(private datePickerOptionService: DatePickerOptionService) {
+  myDatePickerOptions: IMyDpOptions;   
+  scheduleSetup: ScheduleSetup;
+  
+  private scheduleSetupSubscription: ISubscription;
+  
+  constructor(
+    private datePickerOptionService: DatePickerOptionService,
+    private scheduleSetupService: ScheduleSetupService) {
   }
 
   ngOnInit() {
     this.myDatePickerOptions = this.datePickerOptionService.getDatePickerOptions();
+    this.scheduleSetupSubscription = this.scheduleSetupService.getScheduleSetups().subscribe(setups => {
+      this.scheduleSetup = setups != null && setups.length > 0 ? setups[0] : null;
+    });
+  }
+
+  ngOnDestroy(){
+    if(this.scheduleSetupSubscription != null)
+      this.scheduleSetupSubscription.unsubscribe();
   }
 
   onFromDateChanged(event: IMyDateModel){
