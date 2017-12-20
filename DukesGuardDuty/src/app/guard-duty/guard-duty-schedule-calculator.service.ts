@@ -26,6 +26,7 @@ export class GuardDutyScheduleCalculatorService {
   }
 
   getWeeksBetweenDates(startDate: Date, endDate: Date) {
+    console.log(endDate);
     var WEEK = 1000 * 60 * 60 * 24 * 7;
     startDate.setHours(0,0,0,0);
     endDate.setHours(0,0,0,0);

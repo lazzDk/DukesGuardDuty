@@ -5,7 +5,7 @@
     </h5>
   </div>
 </div>
-
+<!--
 <div class="row">
   <div class="col-lg-8 col-xs-12">
       <div class="input-group">
@@ -14,6 +14,7 @@
       </div>
    </div>
 </div>
+-->
 <div *ngIf="scheduleSetup != null">
   <div class="row">
     <div class="col-lg-8 col-xs-12">
@@ -63,13 +64,13 @@
       </table>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="allowOptions">
     <div class="col-lg-8 col-xs-12">
       <button class="btn btn-success float-left" [disabled]="weeksBetweenDates == 0" (click)="moveWeekBackward()"><span aria-hidden="true"> &larr;</span> Tidligere</button>
       <button class="btn btn-success float-right" (click)="moveWeekForward()">Næste <span aria-hidden="true"> &rarr;</span> </button>
     </div>
   </div>
-  <div class=" push-to-bottom">
+  <div class="push-to-bottom" *ngIf="allowOptions">
     Vagtplanen er beregnet med start i uge <span class="badge badge-dark">{{startWeek}}</span>
   </div>
 </div>
