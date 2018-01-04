@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GuardDutyComponent } from './guard-duty.component';
+import { GuardDutyStepComponent } from './guard-duty-step.component';
 
 describe('GuardDutyComponent', () => {
-  let component: GuardDutyComponent;
-  let fixture: ComponentFixture<GuardDutyComponent>;
+  let component: GuardDutyStepComponent;
+  let fixture: ComponentFixture<GuardDutyStepComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GuardDutyComponent ]
+      declarations: [ GuardDutyStepComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GuardDutyComponent);
+    fixture = TestBed.createComponent(GuardDutyStepComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

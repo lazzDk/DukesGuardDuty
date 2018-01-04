@@ -11,10 +11,11 @@ import { MyDatePickerModule  } from 'mydatepicker';
 
 import { AdminComponent } from './admin/admin.component';
 import { AccessService } from './admin/access.service';
+import { DatePickerOptionService } from './shared/date-picker-option.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './auth/auth.service';
-import { GuardDutyComponent } from './guard-duty/guard-duty.component';
+import { GuardDutyStepComponent } from './guard-duty/guard-duty-step/guard-duty-step.component';
 import { GuardDutySwitchService } from './guard-duty/guard-duty-switch/guard-duty-switch.service';
 import { GuardDutyScheduleCalculatorService } from './guard-duty/guard-duty-schedule-calculator.service';
 import { ScheduleSetupComponent } from './schedule-setup/schedule-setup.component';
@@ -23,16 +24,22 @@ import { UserComponent } from './user/user.component';
 import { UserCreationComponent } from './user/user-creation/user-creation.component';
 import { UserService } from './user/user.service';
 import { GuardDutySwitchComponent } from './guard-duty/guard-duty-switch/guard-duty-switch.component';
+import { GuardDutyViewerComponent } from './guard-duty/guard-duty-viewer/guard-duty-viewer.component';
+import { GuardDutySelectorComponent } from './guard-duty/guard-duty-selector/guard-duty-selector.component';
+import { GuardDutyStepUsersComponent } from './guard-duty/guard-duty-step/guard-duty-step-users/guard-duty-step-users.component';
 
 @NgModule({
   declarations: [
+    AdminComponent,
     AppComponent,
     UserComponent,
-    GuardDutyComponent,
+    GuardDutyStepComponent,
     UserCreationComponent,
     ScheduleSetupComponent,
-    AdminComponent,
-    GuardDutySwitchComponent
+    GuardDutySwitchComponent,
+    GuardDutyViewerComponent,
+    GuardDutySelectorComponent,
+    GuardDutyStepUsersComponent
   ],
   imports: [
     AppRoutingModule,
@@ -46,6 +53,7 @@ import { GuardDutySwitchComponent } from './guard-duty/guard-duty-switch/guard-d
   providers: [ 
     AccessService,
     AuthService,
+    DatePickerOptionService,
     GuardDutyScheduleCalculatorService,
     GuardDutySwitchService,
     ScheduleSetupService,

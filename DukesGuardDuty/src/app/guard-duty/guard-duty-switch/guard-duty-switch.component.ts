@@ -12,7 +12,8 @@ import { GuardDutySwitchService } from './guard-duty-switch.service';
 import { GuardDutyScheduleCalculatorService } from './../guard-duty-schedule-calculator.service';
 
 import { GuardDutySwitch } from './guard-duty-switch.model';
-
+import { DatePickerOptionService } from './../../shared/date-picker-option.service';
+ 
 @Component({
   selector: 'app-guard-duty-switch',
   templateUrl: './guard-duty-switch.component.html',
@@ -36,25 +37,19 @@ export class GuardDutySwitchComponent implements OnInit, OnDestroy {
   guardDutyUsersFrom: User[];
   guardDutyUsersTo: User[];
 
-  myDatePickerOptions: IMyDpOptions = {
-    dateFormat: 'dd-mm-yyyy',
-    editableDateField: false,
-    openSelectorOnInputClick: true,
-    inline: false,  
-    showWeekNumbers:true,
-    todayBtnTxt: "Denne uge",
-    dayLabels:{su: 'Søn', mo: 'Man', tu: 'Tirs', we: 'Ons', th: 'Tors', fr: 'Fre', sa: 'Lør'},
-    monthLabels: { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'Maj', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Okt', 11: 'Nov', 12: 'Dec' },
-  }
-
+  myDatePickerOptions: IMyDpOptions; 
+ 
   constructor(
     private guardDutySwitchService: GuardDutySwitchService, 
     private scheduleCalculator:GuardDutyScheduleCalculatorService, 
-    private scheduleSetupService: ScheduleSetupService) { 
+    private scheduleSetupService: ScheduleSetupService,
+    private datePickerOptionService: DatePickerOptionService) {
     
    }
 
   ngOnInit() {
+    this.myDatePickerOptions = this.datePickerOptionService.getDatePickerOptions();
+    
     this.scheduleSetupSubscription = this.scheduleSetupService.getMappedScheduleSetup().subscribe(setups => {
       this.scheduleSetup = setups != null && setups.length > 0 ? setups[0] : null;
         if(this.scheduleSetup != null){

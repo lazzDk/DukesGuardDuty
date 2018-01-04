@@ -4,15 +4,17 @@ import { Observable } from 'rxjs/Observable';
 
 import { IMyDpOptions, IMyDateModel } from 'mydatepicker';
 
+import { DatePickerOptionService } from './../shared/date-picker-option.service';
 import { ScheduleSetup } from './schedule-setup.model';
+import { ScheduleSetupService } from './schedule-setup.service';
 import { User } from './../user/user.model';
 import { UserService} from './../user/user.service';
-import { ScheduleSetupService } from './schedule-setup.service';
+
 
 @Component({
   selector: 'app-schedule-setup',
   templateUrl: './schedule-setup.component.html',
-  styleUrls: ['./schedule-setup.component.css']
+  styleUrls: ['./schedule-setup.component.css'],
 }) 
 
 export class ScheduleSetupComponent implements OnInit {
@@ -22,16 +24,13 @@ export class ScheduleSetupComponent implements OnInit {
   scheduleSetups: Observable<ScheduleSetup[]>;
 
   users: Observable<User[]>;
+  myDatePickerOptions: IMyDpOptions;
 
-  myDatePickerOptions: IMyDpOptions = {
-    dateFormat: 'dd-mm-yyyy',
-    editableDateField	:false,
-    showWeekNumbers:true,
-    dayLabels:{su: 'Søn', mo: 'Man', tu: 'Tirs', we: 'Ons', th: 'Tors', fr: 'Fre', sa: 'Lør'},
-    monthLabels: { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'Maj', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Okt', 11: 'Nov', 12: 'Dec' }
-  }
-
- constructor(private scheduleSetupService: ScheduleSetupService, private userService: UserService){
+ constructor(
+   private scheduleSetupService: ScheduleSetupService,
+   private userService: UserService,
+   private datePickerOptionService: DatePickerOptionService){
+    this.myDatePickerOptions = this.datePickerOptionService.getDatePickerOptions();
     this.users = this.userService.getUsers();
     this.scheduleSetups = this.scheduleSetupService.getScheduleSetups();
   }

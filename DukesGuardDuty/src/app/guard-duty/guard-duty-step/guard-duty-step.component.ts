@@ -1,71 +1,58 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges  } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { ISubscription } from "rxjs/Subscription";
 
 import { IMyDpOptions, IMyDateModel } from 'mydatepicker';
 
-import { GuardDutySwitch } from './guard-duty-switch/guard-duty-switch.model';
-import { GuardDutySwitchService } from './guard-duty-switch/guard-duty-switch.service';
-import { GuardDutyScheduleCalculatorService } from './guard-duty-schedule-calculator.service';
+import { GuardDutySwitch } from './../guard-duty-switch/guard-duty-switch.model';
+import { GuardDutySwitchService } from './../guard-duty-switch/guard-duty-switch.service';
+import { GuardDutyScheduleCalculatorService } from './../guard-duty-schedule-calculator.service';
 
-import { ScheduleSetup } from './../schedule-setup/schedule-setup.model';
-import { ScheduleSetupService } from './../schedule-setup/schedule-setup.service';
-import { User } from './../user/user.model';
+import { ScheduleSetup } from './../../schedule-setup/schedule-setup.model';
+import { ScheduleSetupService } from './../../schedule-setup/schedule-setup.service';
+import { User } from './../../user/user.model';
 import { forEach } from '@angular/router/src/utils/collection';
 
+import { DatePickerOptionService } from './../../shared/date-picker-option.service';
+
 @Component({
-  selector: 'app-guard-duty',
-  templateUrl: './guard-duty.component.html',
-  styleUrls: ['./guard-duty.component.css']
+  selector: 'app-guard-duty-step',
+  templateUrl: './guard-duty-step.component.html',
+  styleUrls: ['./guard-duty-step.component.css']
 })
 
-export class GuardDutyComponent implements OnInit, OnDestroy {
-  scheduleSetup: ScheduleSetup;
+export class GuardDutyStepComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() scheduleSetup: ScheduleSetup;
+  @Input() showSelectedWeek: boolean;
   startWeek:number = 0;
   maxWeeksInStartYear: number = 52;  
   guardDutyUsers: User[];
   guardDutySwitches: GuardDutySwitch[];
   weeksBetweenDates: number = 0;
-  
+  myDatePickerOptions: IMyDpOptions; 
+
   private scheduleSetupSubscription: ISubscription;
   private guardDutySubscription: ISubscription;
-
-  myDatePickerOptions: IMyDpOptions = {
-    dateFormat: 'dd-mm-yyyy',
-    editableDateField: false,
-    openSelectorOnInputClick: true,
-    inline: false,  
-    showWeekNumbers:true,
-    todayBtnTxt: "Denne uge",
-    dayLabels:{su: 'Søn', mo: 'Man', tu: 'Tirs', we: 'Ons', th: 'Tors', fr: 'Fre', sa: 'Lør'},
-    monthLabels: { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'Maj', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Okt', 11: 'Nov', 12: 'Dec' },
-  }
 
   constructor(
     private scheduleSetupService: ScheduleSetupService, 
     private guardDutySwitchService: GuardDutySwitchService, 
-    private scheduleCalculator: GuardDutyScheduleCalculatorService) {
+    private scheduleCalculator: GuardDutyScheduleCalculatorService,
+    private datePickerOptionService: DatePickerOptionService) {
    }
 
-  ngOnInit() {
-    this.guardDutySubscription =  this.guardDutySwitchService.getGuardDutySwitches().subscribe(switches => {
+  ngOnInit() { 
+    this.myDatePickerOptions = this.datePickerOptionService.getDatePickerOptions();
+    this.guardDutySubscription = this.guardDutySwitchService.getGuardDutySwitches().subscribe(switches => {
       this.guardDutySwitches = switches;
-    });
-    this.scheduleSetupSubscription = this.scheduleSetupService.getScheduleSetups().subscribe(setups => {
-      this.scheduleSetup = setups != null && setups.length > 0 ? setups[0] : null;
-      if(this.scheduleSetup != null){
-        this.setStartDateInfo();
-        this.setScheduleForCurrentWeek();
-      }
-    });
+    }); 
   }
 
   ngOnDestroy(){
     if(this.guardDutySubscription != null)
       this.guardDutySubscription.unsubscribe ();
-    if(this.scheduleSetupSubscription != null)
-      this.scheduleSetupSubscription.unsubscribe();
+   
   }
 
   setScheduleForCurrentWeek(){
@@ -75,9 +62,16 @@ export class GuardDutyComponent implements OnInit, OnDestroy {
     this.calculateTeams();
   }
 
+  getWeekNumberInYear(weekNumber:number) {
+    if(weekNumber <= this.maxWeeksInStartYear)
+      return weekNumber;
+    weekNumber = weekNumber - this.maxWeeksInStartYear;
+    return this.getWeekNumberInYear(weekNumber);
+  }
+
   getWeekNumberViewFriendly(week:number){
-    let maxWeeks = this.startWeek + this.weeksBetweenDates + week;
-    return maxWeeks > this.maxWeeksInStartYear ? maxWeeks - this.maxWeeksInStartYear : maxWeeks;
+    let weekForIteration = this.startWeek + this.weeksBetweenDates + week;
+    return this.getWeekNumberInYear(weekForIteration); 
   }
 
   setStartDateInfo() {
@@ -103,7 +97,7 @@ export class GuardDutyComponent implements OnInit, OnDestroy {
     return this.scheduleSetup.users.slice();
   }
 
-  calculateTeams() {
+  calculateTeams() { 
     if(this.scheduleCalculator.isEvenWeek(this.weeksBetweenDates)) {
       this.guardDutyUsers = this.getDefaultScheduleSetupUserArray();
       this.scheduleCalculator.switchTeamsForNRounds(this.guardDutyUsers, this.weeksBetweenDates);
@@ -181,21 +175,40 @@ export class GuardDutyComponent implements OnInit, OnDestroy {
     }
   }
 
-
+  @Input() chosenDate: number;
+  @Input() allowOptions: boolean = false;
+  ngOnChanges(changes) { 
+    if(this.scheduleSetup != null) {
+      this.setStartDateInfo();
+      if(this.chosenDate != null) {
+        this.weeksBetweenDates = this.scheduleCalculator.getWeeksBetweenDates(new Date(this.scheduleSetup.startDate), new Date(this.chosenDate));
+        this.calculateTeams();
+      }
+      else{
+        this.setScheduleForCurrentWeek();
+      }
+    }
+  }
+/*
   onDateChanged(event: IMyDateModel){
-    console.log("date changed");
     if(event == null || event.jsdate == null)
       return;
     this.weeksBetweenDates = this.scheduleCalculator.getWeeksBetweenDates(new Date(this.scheduleSetup.startDate), new Date(event.jsdate));
     this.calculateTeams();
   }
-
+*/
   moveWeekForward(){
+    if(!this.allowOptions) {
+      return;
+    }
     this.weeksBetweenDates = this.weeksBetweenDates + 1;
     this.calculateTeams();
   }
 
   moveWeekBackward(){
+    if(!this.allowOptions) {
+      return;
+    }
     let previousWeek = this.weeksBetweenDates - 1;
     this.weeksBetweenDates = previousWeek < 0 ? 0 :  previousWeek;
     this.calculateTeams();

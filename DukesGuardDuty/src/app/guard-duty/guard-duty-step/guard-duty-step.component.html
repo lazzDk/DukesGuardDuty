@@ -1,11 +1,11 @@
-<div class="row" *ngIf="scheduleSetup != null">
+<div class="row" *ngIf="scheduleSetup != null && showSelectedWeek">
   <div class="col-lg-6 col-xs-12">
     <h5>
         Valgt uge <span class="badge badge-dark">{{getWeekNumberViewFriendly(0)}}</span>
     </h5>
   </div>
 </div>
-
+<!--
 <div class="row">
   <div class="col-lg-8 col-xs-12">
       <div class="input-group">
@@ -14,6 +14,7 @@
       </div>
    </div>
 </div>
+-->
 <div *ngIf="scheduleSetup != null">
   <div class="row">
     <div class="col-lg-8 col-xs-12">
@@ -29,47 +30,41 @@
           <tr>
             <td><strong>Uge {{getWeekNumberViewFriendly(0)}}</strong></td>
             <td>
-              {{guardDutyUsers[0].initials}}
-              /
-              {{guardDutyUsers[1].initials}} 
+              <app-guard-duty-step-users [firstUser]="guardDutyUsers[0]" [secondUser]="guardDutyUsers[1]"></app-guard-duty-step-users>
             </td>
             <td>
-              {{guardDutyUsers[2].initials}}
-              /
-              {{guardDutyUsers[3].initials}} 
+              <app-guard-duty-step-users [firstUser]="guardDutyUsers[2]" [secondUser]="guardDutyUsers[3]"></app-guard-duty-step-users>
             </td>
           </tr>
           <tr>
               <td><strong>Uge {{getWeekNumberViewFriendly(1)}}</strong></td>
               <td>
-                {{guardDutyUsers[4].initials}}
-                /
-                {{guardDutyUsers[5].initials}} 
+                <app-guard-duty-step-users [firstUser]="guardDutyUsers[4]" [secondUser]="guardDutyUsers[5]"></app-guard-duty-step-users>
               </td>
               <td>
-                {{guardDutyUsers[6].initials}}
-                /
-                {{guardDutyUsers[7].initials}} 
+                <app-guard-duty-step-users [firstUser]="guardDutyUsers[6]" [secondUser]="guardDutyUsers[7]"></app-guard-duty-step-users>
               </td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <td colspan="3">
-              Sidder over: {{guardDutyUsers[8].initials}}
+             <!-- Sidder over: {{guardDutyUsers[8].initials}} -->
+
+              Sidder over: <span class="badge badge-secondary">{{guardDutyUsers[8].initials}}</span>
             </td>
           </tr>
         </tfoot>
       </table>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="allowOptions">
     <div class="col-lg-8 col-xs-12">
       <button class="btn btn-success float-left" [disabled]="weeksBetweenDates == 0" (click)="moveWeekBackward()"><span aria-hidden="true"> &larr;</span> Tidligere</button>
       <button class="btn btn-success float-right" (click)="moveWeekForward()">Næste <span aria-hidden="true"> &rarr;</span> </button>
     </div>
   </div>
-  <div class=" push-to-bottom">
+  <div class="push-to-bottom" *ngIf="allowOptions">
     Vagtplanen er beregnet med start i uge <span class="badge badge-dark">{{startWeek}}</span>
   </div>
 </div>
