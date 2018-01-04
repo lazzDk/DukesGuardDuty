@@ -24,6 +24,7 @@ import { DatePickerOptionService } from './../../shared/date-picker-option.servi
 
 export class GuardDutyStepComponent implements OnInit, OnChanges, OnDestroy {
   @Input() scheduleSetup: ScheduleSetup;
+  @Input() showSelectedWeek: boolean;
   startWeek:number = 0;
   maxWeeksInStartYear: number = 52;  
   guardDutyUsers: User[];
@@ -45,11 +46,7 @@ export class GuardDutyStepComponent implements OnInit, OnChanges, OnDestroy {
     this.myDatePickerOptions = this.datePickerOptionService.getDatePickerOptions();
     this.guardDutySubscription = this.guardDutySwitchService.getGuardDutySwitches().subscribe(switches => {
       this.guardDutySwitches = switches;
-    });
-    if(this.scheduleSetup != null){
-      this.setStartDateInfo();
-      this.setScheduleForCurrentWeek();
-    }
+    }); 
   }
 
   ngOnDestroy(){
@@ -65,9 +62,16 @@ export class GuardDutyStepComponent implements OnInit, OnChanges, OnDestroy {
     this.calculateTeams();
   }
 
+  getWeekNumberInYear(weekNumber:number) {
+    if(weekNumber <= this.maxWeeksInStartYear)
+      return weekNumber;
+    weekNumber = weekNumber - this.maxWeeksInStartYear;
+    return this.getWeekNumberInYear(weekNumber);
+  }
+
   getWeekNumberViewFriendly(week:number){
-    let maxWeeks = this.startWeek + this.weeksBetweenDates + week;
-    return maxWeeks > this.maxWeeksInStartYear ? maxWeeks - this.maxWeeksInStartYear : maxWeeks;
+    let weekForIteration = this.startWeek + this.weeksBetweenDates + week;
+    return this.getWeekNumberInYear(weekForIteration); 
   }
 
   setStartDateInfo() {
@@ -93,8 +97,7 @@ export class GuardDutyStepComponent implements OnInit, OnChanges, OnDestroy {
     return this.scheduleSetup.users.slice();
   }
 
-  calculateTeams() {
-    console.log("calculateTeams " +this.weeksBetweenDates);
+  calculateTeams() { 
     if(this.scheduleCalculator.isEvenWeek(this.weeksBetweenDates)) {
       this.guardDutyUsers = this.getDefaultScheduleSetupUserArray();
       this.scheduleCalculator.switchTeamsForNRounds(this.guardDutyUsers, this.weeksBetweenDates);
@@ -175,12 +178,15 @@ export class GuardDutyStepComponent implements OnInit, OnChanges, OnDestroy {
   @Input() chosenDate: number;
   @Input() allowOptions: boolean = false;
   ngOnChanges(changes) { 
-    console.log("setting changes");
-    console.log(this.scheduleSetup != null);
     if(this.scheduleSetup != null) {
-      console.log("i have schedule");
-      this.weeksBetweenDates = this.scheduleCalculator.getWeeksBetweenDates(new Date(this.scheduleSetup.startDate), new Date(this.chosenDate));
-      this.calculateTeams();
+      this.setStartDateInfo();
+      if(this.chosenDate != null) {
+        this.weeksBetweenDates = this.scheduleCalculator.getWeeksBetweenDates(new Date(this.scheduleSetup.startDate), new Date(this.chosenDate));
+        this.calculateTeams();
+      }
+      else{
+        this.setScheduleForCurrentWeek();
+      }
     }
   }
 /*

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { ISubscription } from "rxjs/Subscription";
 
@@ -8,18 +8,18 @@ import { DatePickerOptionService } from './../../shared/date-picker-option.servi
 import { ScheduleSetup } from './../../schedule-setup/schedule-setup.model';
 import { ScheduleSetupService } from './../../schedule-setup/schedule-setup.service';
 
+
 @Component({
   selector: 'app-guard-duty-viewer',
   templateUrl: './guard-duty-viewer.component.html',
   styleUrls: ['./guard-duty-viewer.component.css']
 })
-export class GuardDutyViewerComponent implements OnInit, OnDestroy {
-  chosenDate:Date;
+export class GuardDutyViewerComponent implements OnInit {
+  chosenDate:number;
   myDatePickerOptions: IMyDpOptions; 
   scheduleSetup: ScheduleSetup;
   
-  private scheduleSetupSubscription: ISubscription;
-  
+  private scheduleSetupSubscription: ISubscription;  
 
   constructor(
     private datePickerOptionService: DatePickerOptionService,
@@ -34,16 +34,11 @@ export class GuardDutyViewerComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(){
-    if(this.scheduleSetupSubscription != null)
-      this.scheduleSetupSubscription.unsubscribe();
-  }
-
   
   onDateChanged(event: IMyDateModel){
     if(event == null || event.jsdate == null)
       return;
-    this.chosenDate =  new Date(event.jsdate); 
+    this.chosenDate =  new Date(event.jsdate).getTime(); 
   }
 
 }

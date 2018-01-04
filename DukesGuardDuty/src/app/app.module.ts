@@ -26,6 +26,7 @@ import { UserService } from './user/user.service';
 import { GuardDutySwitchComponent } from './guard-duty/guard-duty-switch/guard-duty-switch.component';
 import { GuardDutyViewerComponent } from './guard-duty/guard-duty-viewer/guard-duty-viewer.component';
 import { GuardDutySelectorComponent } from './guard-duty/guard-duty-selector/guard-duty-selector.component';
+import { GuardDutyStepUsersComponent } from './guard-duty/guard-duty-step/guard-duty-step-users/guard-duty-step-users.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { GuardDutySelectorComponent } from './guard-duty/guard-duty-selector/gua
     ScheduleSetupComponent,
     GuardDutySwitchComponent,
     GuardDutyViewerComponent,
-    GuardDutySelectorComponent
+    GuardDutySelectorComponent,
+    GuardDutyStepUsersComponent
   ],
   imports: [
     AppRoutingModule,

@@ -1,5 +1,10 @@
 <div class="row">
   <div class="col-lg-8 col-xs-12">
+      <h3>Se vagtskema fra dato og et år frem</h3>
+   </div>
+</div>
+<div class="row">
+  <div class="col-lg-8 col-xs-12">
       <div class="input-group">
           <span class="input-group-addon" id="basic-name">Dato</span>
           <my-date-picker class="form-control" [options]="myDatePickerOptions" (dateChanged)="onFromDateChanged($event)" aria-describedby="basic-name"></my-date-picker>
@@ -7,5 +12,5 @@
    </div>
 </div>
 <div *ngFor="let dt of chosenDates">
-  <app-guard-duty-step [chosenDate]="dt" [allowOptions]="false" [scheduleSetup]="scheduleSetup" ></app-guard-duty-step>
+  <app-guard-duty-step [chosenDate]="dt" [allowOptions]="false" [showSelectedWeek]="false" [scheduleSetup]="scheduleSetup" ></app-guard-duty-step>
 </div>
